@@ -27,6 +27,8 @@ AM_CPPFLAGS += -DSHARE_DATADIR="\"$(datadir)\""		\
 		-DLOCALSTATEDIR="\"$(localstatedir)\""	\
 		-DBINDIR="\"$(bindir)\""
 
+AM_CFLAGS += -L src/lib/goddos -lgoddos
+
 src_core_libtor_app_testing_a_CPPFLAGS = $(AM_CPPFLAGS) $(TEST_CPPFLAGS)
 src_core_libtor_app_testing_a_CFLAGS = $(AM_CFLAGS) $(TEST_CFLAGS)
 

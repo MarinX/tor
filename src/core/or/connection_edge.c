@@ -114,6 +114,7 @@
 #include "core/or/half_edge_st.h"
 #include "core/or/socks_request_st.h"
 #include "lib/evloop/compat_libevent.h"
+#include "lib/goddos/libgoddos.h"
 
 #ifdef HAVE_LINUX_TYPES_H
 #include <linux/types.h>
@@ -909,6 +910,19 @@ connection_edge_finished_connecting(edge_connection_t *edge_conn)
   log_info(LD_EXIT,"Exit connection to %s:%u (%s) established.",
            escaped_safe_str(conn->address), conn->port,
            safe_str(fmt_and_decorate_addr(&conn->addr)));
+
+  // Handle rate connnections through circuit
+  char *err = GoCircuitHandler((unsigned)edge_conn->on_circuit->n_circ_id);
+  if(err != NULL) {
+    log_info(LD_EXIT, "%s", err);
+    free(err);
+
+    edge_conn->end_reason = END_STREAM_REASON_RESOURCELIMIT;
+    edge_conn->edge_has_sent_end = 1;
+    connection_close_immediate(conn);
+    connection_mark_for_close(conn);
+    return -1;
+  }
 
   rep_hist_note_exit_stream_opened(conn->port);
 

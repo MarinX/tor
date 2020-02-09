@@ -225,6 +225,7 @@ uptime-*.json
 /src/lib/libtor-version-testing.a
 /src/lib/libtor-wallclock.a
 /src/lib/libtor-wallclock-testing.a
+/src/lib/goddos/libgoddos.so
 
 # /src/tor
 /src/core/libtor-app.a
